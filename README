@@ -1,0 +1,24 @@
+Haskell bindings for TDB
+Jelmer Vernooij <jelmer@samba.org>, 2006
+------------------------
+This directory contains initial work on haskell bindings for TDB. 
+
+In order to compile this module, you will have to install both ghc, 
+a recent version of c2hs and, of course, tdb.
+
+Run:
+
+chmod a+x Setup.hs
+./Setup.hs configure
+./Setup.hs build
+./Setup.hs install
+
+to build and install the bindings.
+
+If you would like documentation as well, make sure you have 
+'haddock' installed and run:
+
+./Setup.hs haddock
+
+The 'tests' directory contains a couple of small examples that use 
+the TDB module.

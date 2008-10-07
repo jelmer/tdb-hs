@@ -31,9 +31,12 @@
 
 -- TODO: throw exception if return codes are non-zero
 
-module TDB (open, hashsize, close, startTransaction, commitTransaction, cancelTransaction)
+module TDB (open, hashsize, close, reopen, startTransaction, commitTransaction, 
+			cancelTransaction, name)
 where
-import C2HS
+import Foreign.C.String
+import Foreign.C
+import Foreign
 import Data.Binary
 
 {#context lib = "tdb"#}
@@ -69,15 +72,21 @@ store ctx key val = do ret <- {#call tdb_store#} ctx (toDataBlob key) (toDataBlo
                     return (toBool ret)
 -}
 
+transact :: (Context -> IO CInt) -> Context -> IO Bool
+transact fn ctx = do ret <- fn ctx; return (toBool ret)
+
 startTransaction :: Context -> IO Bool
-startTransaction ctx = do ret <- {#call tdb_transaction_start#} ctx
-                          return (toBool ret)
+startTransaction = transact {#call tdb_transaction_start#}
 
 commitTransaction :: Context -> IO Bool
-commitTransaction ctx = do ret <- {#call tdb_transaction_commit#} ctx
-                           return (toBool ret)
+commitTransaction = transact {#call tdb_transaction_commit#}
 
 cancelTransaction :: Context -> IO Bool
-cancelTransaction ctx = do ret <- {#call tdb_transaction_cancel#} ctx
-                           return (toBool ret)
+cancelTransaction = transact {#call tdb_transaction_cancel#}
 
+reopen :: Context -> IO ()
+reopen ctx = do ret <- {#call tdb_reopen#} ctx
+                return ()
+
+name :: Context -> IO String
+name = peekCString . {#call pure tdb_name#}
