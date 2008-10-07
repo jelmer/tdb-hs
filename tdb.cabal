@@ -1,0 +1,15 @@
+Name: 		tdb
+Version: 	1.0
+Synopsis:	Haskell bindings for TDB, a simple embedded database
+License: 	LGPL
+License-File: 	COPYING
+Maintainer: 	jelmer@samba.org
+Copyright: 	Copyright (C) [2005..2008] Jelmer Vernooij
+Author: 	Jelmer Vernooij
+Stability: 	provisional
+Homepage: 	http://samba.org/~jelmer/tdb-hs
+Exposed-modules: TDB
+Category:       Database Library
+Build-Depends:  base, haskell98, binary
+pkgconfig-depends: tdb
+Extensions:	ForeignFunctionInterface
